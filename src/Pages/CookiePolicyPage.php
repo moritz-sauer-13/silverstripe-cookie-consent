@@ -79,6 +79,9 @@ class CookiePolicyPage extends Page
      */
     public static function instance(): DataObject|CookiePolicyPage
     {
+        if (!self::get()->exists()) {
+            return CookiePolicyPage::create();
+        }
         return self::get()->first();
     }
 
