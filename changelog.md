@@ -4,6 +4,50 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.12.2]
+
+* fix check for persistance cookie, making sure that locale is still written to session
+
+## [3.12.1]
+
+* fix wording of necessary cookie buttons
+
+## [3.12.0]
+
+* add consent data to emitted updateCookieConsent js event
+
+## [3.11.1]
+
+* urldecode value received via http header
+
+## [3.11.0]
+
+* determine consent settings using http header, useful when site is behind a CDN and cookies are being replaced by headers
+
+## [3.10.3]
+
+* only check for cookie setting if cookie persistance is enabled
+
+## [3.10.2]
+
+* fix setting multiple cookies when updating consent through the form
+
+## [3.10.1]
+
+* fix missing class when fluent is not installed: only define middleware class if fluent class exists
+
+## [3.10.0]
+
+* Set "FluentLocale" cookie only when user has accepted the necessary cookies (thanks to @moritz-sauer-13)
+
+## [3.9.1]
+
+* fix formatting
+
+## [3.9.0]
+
+* update default texts for cookie policy page and cookie categories after external review
+
 ## [3.8.0]
 
 * fail silently and log error instead of throwing exception when checked cookie category is not defined

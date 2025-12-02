@@ -2,6 +2,10 @@
 
 namespace Innoweb\CookieConsent\Middleware;
 
+if (!class_exists('TractorCow\Fluent\Middleware\DetectLocaleMiddleware')) {
+    return;
+}
+
 use Innoweb\CookieConsent\CookieConsent;
 use SilverStripe\Control\HTTPRequest;
 use TractorCow\Fluent\Middleware\DetectLocaleMiddleware;
@@ -10,8 +14,12 @@ class DetectLocaleWithCookieConsentMiddleware extends DetectLocaleMiddleware
 {
     protected function setPersistLocale(HTTPRequest $request, $locale)
     {
-        if(CookieConsent::check(CookieConsent::PREFERENCES)){
-            parent::setPersistLocale($request, $locale);
+        if(DetectLocaleMiddleware::config()->get('persist_cookie')
+            && !CookieConsent::check(CookieConsent::PREFERENCES)
+        ){
+            DetectLocaleMiddleware::config()->set('persist_cookie', false);
         }
+
+        parent::setPersistLocale($request, $locale);
     }
 }
