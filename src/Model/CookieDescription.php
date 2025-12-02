@@ -25,51 +25,51 @@ use SilverStripe\ORM\DataObject;
  */
 class CookieDescription extends DataObject
 {
-    private static $table_name = 'CookieDescription';
+    private static string $table_name = 'CookieDescription';
 
-    private static $db = array(
+    private static array $db = [
         'ConfigName' => 'Varchar(255)',
         'Title' => 'Varchar(255)',
         'Provider' => 'Varchar(255)',
         'Purpose' => 'Varchar(255)',
         'Expiry' => 'Varchar(255)'
-    );
+    ];
 
-    private static $has_one = array(
+    private static array $has_one = [
         'Group' => CookieGroup::class
-    );
+    ];
 
-    private static $summary_fields = array(
+    private static array $summary_fields = [
         'Title',
         'Provider',
         'Purpose',
         'Expiry'
-    );
+    ];
 
-    private static $translate = array(
+    private static array $translate = [
         'Purpose',
         'Expiry'
-    );
+    ];
 
-    private static $singular_name = 'Cookie description';
+    private static string $singular_name = 'Cookie description';
 
-    private static $plural_name = 'Cookie descriptions';
+    private static string $plural_name = 'Cookie descriptions';
 
-    public function getCMSFields()
+    public function getCMSFields(): FieldList
     {
         $fields = FieldList::create(TabSet::create('Root', $mainTab = Tab::create('Main')));
-        $fields->addFieldsToTab('Root.Main', array(
+        $fields->addFieldsToTab('Root.Main', [
             TextField::create('Title', $this->fieldLabel('Title')),
             TextField::create('Provider', $this->fieldLabel('Provider')),
             TextField::create('Purpose', $this->fieldLabel('Purpose')),
             TextField::create('Expiry', $this->fieldLabel('Expiry'))
-        ));
+        ]);
 
         $this->extend('updateCMSFields', $fields);
         return $fields;
     }
 
-    public function getProviderLabel()
+    public function getProviderLabel(): string
     {
         if ($this->Provider == CookieGroup::LOCAL_PROVIDER) {
             return Director::host();
@@ -83,7 +83,7 @@ class CookieDescription extends DataObject
      * @param null $member
      * @return bool
      */
-    public function canDelete($member = null)
+    public function canDelete($member = null): bool
     {
         $cookieConfig = Config::inst()->get(CookieConsent::class, 'cookies');
         $found = false;

@@ -28,41 +28,41 @@ use SilverStripe\ORM\HasManyList;
  */
 class CookieGroup extends DataObject
 {
-    const REQUIRED_DEFAULT = 'Necessary';
-    const LOCAL_PROVIDER = 'local';
+    const string REQUIRED_DEFAULT = 'Necessary';
+    const string LOCAL_PROVIDER = 'local';
 
-    private static $table_name = 'CookieGroup';
+    private static string $table_name = 'CookieGroup';
 
-    private static $db = array(
+    private static array $db = [
         'ConfigName' => 'Varchar(255)',
         'Title' => 'Varchar(255)',
         'Content' => 'HTMLText',
-    );
+    ];
 
-    private static $indexes = array(
+    private static array $indexes = [
         'ConfigName' => true
-    );
+    ];
 
-    private static $has_many = array(
+    private static array $has_many = [
         'Cookies' => CookieDescription::class . '.Group'
-    );
+    ];
 
-    private static $translate = array(
+    private static array $translate = [
         'Title',
         'Content'
-    );
+    ];
 
     /**
-     * @return FieldList|mixed
+     * @return FieldList
      */
-    public function getCMSFields()
+    public function getCMSFields(): FieldList
     {
         $fields = FieldList::create(TabSet::create('Root', $mainTab = Tab::create('Main')));
-        $fields->addFieldsToTab('Root.Main', array(
+        $fields->addFieldsToTab('Root.Main', [
             TextField::create('Title', $this->fieldLabel('Title')),
             HtmlEditorField::create('Content', $this->fieldLabel('Content')),
             GridField::create('Cookies', $this->fieldLabel('Cookies'), $this->Cookies(), GridFieldConfigCookies::create())
-        ));
+        ]);
 
         $this->extend('updateCMSFields', $fields);
         return $fields;
@@ -73,7 +73,7 @@ class CookieGroup extends DataObject
      *
      * @return bool
      */
-    public function isRequired()
+    public function isRequired(): bool
     {
         return CookieConsent::isRequired($this->ConfigName);
     }
@@ -83,7 +83,7 @@ class CookieGroup extends DataObject
      *
      * @return CookieConsentCheckBoxField
      */
-    public function createField()
+    public function createField(): CookieConsentCheckBoxField
     {
         return new CookieConsentCheckBoxField($this);
     }
@@ -91,7 +91,7 @@ class CookieGroup extends DataObject
     /**
      * @throws Exception
      */
-    public function requireDefaultRecords()
+    public function requireDefaultRecords(): void
     {
         parent::requireDefaultRecords();
         $cookiesConfig = CookieConsent::config()->get('cookies');
@@ -149,7 +149,7 @@ class CookieGroup extends DataObject
         }
     }
 
-    public function canCreate($member = null, $context = [])
+    public function canCreate($member = null, $context = []): false
     {
         return false;
     }
@@ -160,7 +160,7 @@ class CookieGroup extends DataObject
      * @param null $member
      * @return bool
      */
-    public function canDelete($member = null)
+    public function canDelete($member = null): bool
     {
         $cookieConfig = CookieConsent::config()->get('cookies');
         return !isset($cookieConfig[$this->ConfigName]);

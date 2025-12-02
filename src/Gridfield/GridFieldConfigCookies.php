@@ -28,9 +28,6 @@ class GridFieldConfigCookies extends GridFieldConfig
         $this->addComponent(new GridFieldDeleteAction());
         $this->addComponent(new GridFieldAddNewInlineButton('toolbar-header-right'));
 
-        $sort->setThrowExceptionOnBadDataType(false);
-        $filter->setThrowExceptionOnBadDataType(false);
-
         $this->extend('updateConfig', $this);
     }
 }

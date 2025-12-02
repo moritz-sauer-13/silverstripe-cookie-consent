@@ -12,7 +12,7 @@ use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Environment;
 use SilverStripe\Core\Extension;
-use SilverStripe\ORM\ArrayList;
+use SilverStripe\Model\List\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Security;
 use SilverStripe\View\Requirements;
@@ -24,7 +24,7 @@ use SilverStripe\View\Requirements;
  */
 class ContentControllerExtension extends Extension
 {
-    private static $allowed_actions = [
+    private static array $allowed_actions = [
         'acceptCookies',
         'acceptAllCookies',
         'acceptNecessaryCookies',
@@ -35,11 +35,11 @@ class ContentControllerExtension extends Extension
      *
      * @throws \Exception
      */
-    public function onAfterInit()
+    public function onAfterInit(): void
     {
         if (!($this->owner instanceof Security) && !CookieConsent::check()) {
             if (Config::inst()->get(CookieConsent::class, 'include_css')) {
-                Requirements::css('innoweb/silverstripe-cookie-consent:client/dist/css/cookieconsent.css');
+                Requirements::css('moritz-sauer-13/silverstripe-cookie-consent:client/dist/css/cookieconsent.css');
             }
         }
     }
@@ -51,7 +51,7 @@ class ContentControllerExtension extends Extension
      * @return bool
      * @throws Exception
      */
-    public function CookieConsent($group = CookieConsent::NECESSARY)
+    public function CookieConsent($group = CookieConsent::NECESSARY): bool
     {
         return CookieConsent::check($group);
     }
@@ -61,7 +61,7 @@ class ContentControllerExtension extends Extension
      *
      * @return string
      */
-    public function getCookieConsentCookieName()
+    public function getCookieConsentCookieName(): string
     {
         return Config::inst()->get(CookieConsent::class, 'cookie_name');
     }
@@ -71,7 +71,7 @@ class ContentControllerExtension extends Extension
      *
      * @return string
      */
-    public function getCookieConsentCookieExpiry()
+    public function getCookieConsentCookieExpiry(): string
     {
         return Config::inst()->get(CookieConsent::class, 'cookie_expiry');
     }
@@ -82,11 +82,11 @@ class ContentControllerExtension extends Extension
      *
      * @return bool
      */
-    public function PromptCookieConsent()
+    public function PromptCookieConsent(): bool
     {
         $controller = Controller::curr();
-        $securiy = $controller ? $controller instanceof Security : false;
-        $cookiePolicy = $controller ? $controller instanceof CookiePolicyPageController : false;
+        $securiy = $controller && $controller instanceof Security;
+        $cookiePolicy = $controller && $controller instanceof CookiePolicyPageController;
         $hasConsent = CookieConsent::check();
         $prompt = !$securiy && !$cookiePolicy && !$hasConsent;
         $this->owner->extend('updatePromptCookieConsent', $prompt);
@@ -98,7 +98,7 @@ class ContentControllerExtension extends Extension
      *
      * @return bool
      */
-    public function SiteUsesNecessaryCookiesOnly()
+    public function SiteUsesNecessaryCookiesOnly(): bool
     {
         $categories = array_keys(Config::inst()->get(CookieConsent::class, 'cookies'));
         return count($categories) === 1 && $categories[0] === CookieConsent::NECESSARY;
@@ -184,12 +184,12 @@ class ContentControllerExtension extends Extension
         }
     }
 
-    public function getAcceptAllCookiesLink()
+    public function getAcceptAllCookiesLink(): string
     {
         return Controller::join_links($this->getOwner()->Link(), 'acceptAllCookies');
     }
 
-    public function getAcceptAllCookiesGroups()
+    public function getAcceptAllCookiesGroups(): string
     {
         return implode(',', array_keys(Config::inst()->get(CookieConsent::class, 'cookies')));
     }
@@ -218,7 +218,7 @@ class ContentControllerExtension extends Extension
         }
     }
 
-    public function getAcceptNecessaryCookiesLink()
+    public function getAcceptNecessaryCookiesLink(): string
     {
         return Controller::join_links($this->getOwner()->Link(), 'acceptNecessaryCookies');
     }

@@ -20,21 +20,21 @@ class CookieConsent
     use Injectable;
     use Configurable;
 
-    const NECESSARY = 'Necessary';
-    const ANALYTICS = 'Analytics';
-    const MARKETING = 'Marketing';
-    const EXTERNAL = 'External';
-    const PREFERENCES = 'Preferences';
+    const string NECESSARY = 'Necessary';
+    const string ANALYTICS = 'Analytics';
+    const string MARKETING = 'Marketing';
+    const string EXTERNAL = 'External';
+    const string PREFERENCES = 'Preferences';
 
-    private static $required_groups = [
+    private static array $required_groups = [
         self::NECESSARY
     ];
 
-    private static $cookies = [];
+    private static array $cookies = [];
 
-    private static $include_css = true;
+    private static bool $include_css = true;
 
-    private static $create_default_pages = true;
+    private static bool $create_default_pages = true;
 
     /**
      * Use this name when setting the consent cookie
@@ -42,7 +42,7 @@ class CookieConsent
      * @config
      * @var string
      */
-    private static $cookie_name = 'CookieConsent';
+    private static string $cookie_name = 'CookieConsent';
 
     /**
      * The expiry time in days for a consent persistence cookie
@@ -50,7 +50,7 @@ class CookieConsent
      * @config
      * @var int
      */
-    private static $cookie_expiry = 60;
+    private static int $cookie_expiry = 60;
 
     /**
      * Use this path when setting the consent cookie
@@ -58,7 +58,7 @@ class CookieConsent
      * @config
      * @var string
      */
-    private static $cookie_path = null;
+    private static ?string $cookie_path = null;
 
     /**
      * Use this domain when setting the consent cookie
@@ -66,7 +66,7 @@ class CookieConsent
      * @config
      * @var string
      */
-    private static $cookie_domain = null;
+    private static ?string $cookie_domain = null;
 
     /**
      * Use http-only cookies. Set to true if you don't need js access.
@@ -74,7 +74,7 @@ class CookieConsent
      * @config
      * @var bool
      */
-    private static $cookie_http_only = false;
+    private static bool $cookie_http_only = false;
 
     /**
      * Set consent cookies for all hosts allowed through SS_ALLOWED_HOSTS config
@@ -82,15 +82,15 @@ class CookieConsent
      * @config
      * @var bool
      */
-    private static $include_all_allowed_hosts = false;
+    private static bool $include_all_allowed_hosts = false;
 
     /**
      * Check if there is consent for the given cookie
      *
-     * @param $group
+     * @param string $group
      * @return bool
      */
-    public static function check($group = CookieConsent::NECESSARY)
+    public static function check(string $group = CookieConsent::NECESSARY): bool
     {
         $cookies = self::config()->get('cookies');
         if (!isset($cookies[$group])) {
@@ -103,7 +103,7 @@ class CookieConsent
         }
 
         $consent = self::getConsent();
-        return array_search($group, $consent) !== false;
+        return in_array($group, $consent);
     }
 
     /**
@@ -111,7 +111,7 @@ class CookieConsent
      *
      * @param $group
      */
-    public static function grant($group)
+    public static function grant($group): void
     {
         $consent = self::getConsent();
         if (is_array($group)) {
@@ -125,7 +125,7 @@ class CookieConsent
     /**
      * Grant consent for all the configured cookie groups
      */
-    public static function grantAll()
+    public static function grantAll(): void
     {
         $consent = array_keys(Config::inst()->get(CookieConsent::class, 'cookies'));
         self::setConsent($consent);
@@ -136,7 +136,7 @@ class CookieConsent
      *
      * @param $group
      */
-    public static function remove($group)
+    public static function remove($group): void
     {
         $consent = self::getConsent();
         $key = array_search($group, $consent);
@@ -186,7 +186,7 @@ class CookieConsent
      *
      * @return array
      */
-    public static function getConsent()
+    public static function getConsent(): array
     {
         if ($value = Cookie::get(self::config()->get('cookie_name'))) {
             return explode(',', $value);
@@ -199,7 +199,7 @@ class CookieConsent
      *
      * @param $consent
      */
-    public static function setConsent($consent)
+    public static function setConsent($consent): void
     {
         $consent = array_filter(array_unique(array_merge($consent, self::config()->get('required_groups'))));
 		$request = Controller::curr()->getRequest();
@@ -221,7 +221,7 @@ class CookieConsent
      * @param $group
      * @return bool
      */
-    public static function isRequired($group)
+    public static function isRequired($group): bool
     {
         return in_array($group, self::config()->get('required_groups'));
     }

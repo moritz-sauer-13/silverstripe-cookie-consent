@@ -16,16 +16,16 @@ use SilverStripe\Versioned\Versioned;
  */
 class CookiePolicyPage extends Page
 {
-    private static $table_name = 'CookiePolicyPage';
-    private static $singular_name = 'Cookie Policy Page';
-    private static $plural_name = 'Cookie Policy Pages';
-    private static $description = 'Cookie Policy Page';
+    private static string $table_name = 'CookiePolicyPage';
+    private static string $singular_name = 'Cookie Policy Page';
+    private static string $plural_name = 'Cookie Policy Pages';
+    private static string $description = 'Cookie Policy Page';
 
-    private static $db = [
+    private static array $db = [
         'FooterContent' => 'HTMLText',
     ];
 
-    private static $defaults = [
+    private static array $defaults = [
         'ShowInMenus' => 0
     ];
 
@@ -49,7 +49,7 @@ class CookiePolicyPage extends Page
         return $fields;
     }
 
-    public function requireDefaultRecords()
+    public function requireDefaultRecords(): void
     {
         parent::requireDefaultRecords();
 
@@ -63,7 +63,7 @@ class CookiePolicyPage extends Page
 
     }
 
-    public function populateDefaults()
+    public function populateDefaults(): void
     {
         parent::populateDefaults();
 
@@ -77,7 +77,7 @@ class CookiePolicyPage extends Page
      *
      * @return CookiePolicyPage|DataObject
      */
-    public static function instance()
+    public static function instance(): DataObject|CookiePolicyPage
     {
         return self::get()->first();
     }
@@ -91,7 +91,7 @@ class CookiePolicyPage extends Page
         }
     }
 
-    public function canDelete($member = null)
+    public function canDelete($member = null): true
     {
         return true;
     }

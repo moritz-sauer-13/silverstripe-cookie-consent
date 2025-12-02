@@ -6,6 +6,7 @@ use Innoweb\CookieConsent\CookieConsent;
 use Innoweb\CookieConsent\Model\CookieGroup;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
+use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormAction;
@@ -43,7 +44,7 @@ class CookieConsentForm extends Form
      * @param $data
      * @param Form $form
      */
-    public function submitConsent($data, Form $form)
+    public function submitConsent($data, Form $form): HTTPResponse
     {
         CookieConsent::grant(CookieConsent::config()->get('required_groups'));
         foreach (CookieConsent::config()->get('cookies') as $group => $cookies) {

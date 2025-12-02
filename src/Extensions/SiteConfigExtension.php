@@ -3,50 +3,52 @@
 namespace Innoweb\CookieConsent\Extensions;
 
 use Innoweb\CookieConsent\Model\CookieGroup;
+use SilverStripe\Core\Extension;
+use SilverStripe\Core\Validation\ValidationException;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
 use SilverStripe\Forms\TextField;
-use SilverStripe\ORM\DataExtension;
+use SilverStripe\ORM\DataList;
 use SilverStripe\SiteConfig\SiteConfig;
 
 /**
  * Class SiteConfigExtension
  * @package Innoweb\CookieConsent
  */
-class SiteConfigExtension extends DataExtension
+class SiteConfigExtension extends Extension
 {
-    private static $db = array(
+    private static $db = [
         'CookieConsentTitle' => 'Varchar(255)',
         'CookieConsentContent' => 'HTMLText'
-    );
+    ];
 
-    private static $translate = array(
+    private static $translate = [
         'CookieConsentTitle',
         'CookieConsentContent'
-    );
+    ];
 
     /**
      * @param FieldList $fields
-     * @return FieldList|void
+     * @return void
      */
-    public function updateCMSFields(FieldList $fields)
+    public function updateCMSFields(FieldList $fields): void
     {
         $fields->findOrMakeTab('Root.CookieConsent', _t(__CLASS__ . '.CookieConsent', 'Cookie Consent'));
-        $fields->addFieldsToTab('Root.CookieConsent', array(
+        $fields->addFieldsToTab('Root.CookieConsent', [
             TextField::create('CookieConsentTitle', _t(__CLASS__ . '.CookieConsentTitle', 'Cookie Consent Title')),
             HtmlEditorField::create('CookieConsentContent', _t(__CLASS__ . '.CookieConsentContent', 'Cookie Consent Content')),
             GridField::create('Cookies', _t(__CLASS__ . '.Cookies', 'Cookies'), CookieGroup::get(), GridFieldConfig_RecordEditor::create())
-        ));
+        ]);
     }
 
     /**
      * Set the defaults this way beacause the SiteConfig is probably already created
      *
-     * @throws \SilverStripe\ORM\ValidationException
+     * @throws ValidationException
      */
-    public function requireDefaultRecords()
+    public function requireDefaultRecords(): void
     {
         if ($config = SiteConfig::current_site_config()) {
             if (empty($config->CookieConsentTitle)) {
@@ -61,7 +63,7 @@ class SiteConfigExtension extends DataExtension
         }
     }
 
-    public function getCookieGroups()
+    public function getCookieGroups(): DataList
     {
         return CookieGroup::get();
     }

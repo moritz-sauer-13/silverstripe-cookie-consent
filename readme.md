@@ -1,3 +1,5 @@
+#This is a fork from https://github.com/xini/silverstripe-cookie-consent to add support for Silverstripe 6
+
 # Silverstripe Cookie Consent
 
 [![Version](http://img.shields.io/packagist/v/innoweb/silverstripe-cookie-consent.svg?style=flat-square)](https://packagist.org/packages/innoweb/silverstripe-cookie-consent)
@@ -13,9 +15,9 @@ This is an amended and simplified version of [TheBnl's cookie consent module](ht
 
 ## Requirements
 
-* Silverstripe CMS 5.x
+* Silverstripe CMS 6.x
 
-Note: this version is compatible with Silverstripe 5. For Silverstripe 4, please see the [2 release line](https://github.com/xini/silverstripe-cookie-consent/tree/2).
+Note: this version is compatible with Silverstripe 6.
 
 ## Installation
 

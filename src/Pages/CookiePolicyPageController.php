@@ -11,7 +11,7 @@ use PageController;
  */
 class CookiePolicyPageController extends PageController
 {
-    private static $allowed_actions = [
+    private static array $allowed_actions = [
         'Form'
     ];
 
@@ -20,7 +20,7 @@ class CookiePolicyPageController extends PageController
      *
      * @return CookieConsentForm
      */
-    public function Form()
+    public function Form(): CookieConsentForm
     {
         return CookieConsentForm::create($this, 'Form');
     }
